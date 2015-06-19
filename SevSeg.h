@@ -2,7 +2,7 @@
  * 
  * Adapted by
  * Giulio Fieramosca
- *    http://www.glgprograms.tk
+ *    http://www.glgprograms.it
  * 
  * Originally written by
  * Alexander Brevig
@@ -43,16 +43,19 @@ public:
   // Direct-wiring constructor
   SevSeg (byte a, byte b, byte c, byte d, byte e, byte f, byte g, boolean _commonAnode = false );
   // ShiftRegister-wiring constructor
-  SevSeg (byte data, byte latch, byte clock, boolean _commonAnode = false );
+  SevSeg (byte data, byte latch, byte clock, boolean _commonAnode = false, byte _numberOfDisplays = 1);
   
   ~SevSeg();
   
   void print(byte number);
+  void print(int number, bool zeros = true);
     
 private:
   
   // Pointer to the pins' array
   byte *pinArray;
+  
+  byte numberOfDisplays;
   
   boolean shiftRegister;
   boolean commonAnode;

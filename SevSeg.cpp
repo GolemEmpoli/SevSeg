@@ -19,9 +19,10 @@ SevSeg::SevSeg( byte a, byte b, byte c, byte d, byte e, byte f, byte g, boolean 
     }
 }
 
-SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode) {
+SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode, byte _numberOfDisplays) {
     commonAnode = _commonAnode;
     shiftRegister = true;
+    numberOfDisplays = _numberOfDisplays;
     
     pinArray = new byte[3];
     pinArray[0] = clock;
@@ -34,7 +35,7 @@ SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode) {
 
 }
 
-// Prints the number on the display
+// Prints a number on the display
 void SevSeg::print(byte number) {
 	if (!shiftRegister) {
         for (byte c = 0, dataTmp = dataArray[number]; c < 7; c++, dataTmp = dataTmp >> 1) {
@@ -43,10 +44,40 @@ void SevSeg::print(byte number) {
         
     }
     else {
-        digitalWrite(pinArray[1], LOW);
-        shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number] : dataArray[number]);  
-        digitalWrite(pinArray[1], HIGH);
+        if (numberOfDisplays != 1) {
+            digitalWrite(pinArray[1], LOW);
+            shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number] : dataArray[number]);  
+            digitalWrite(pinArray[1], HIGH);
+        }
+        else
+            this->print(number);
     }
+}
+
+void SevSeg::print(int number, bool zeros) {
+    // Only shift register is allowed
+	if (!shiftRegister) {
+        return;
+    }
+            
+    digitalWrite(pinArray[1], LOW);
+    for (byte c = 0; c < numberOfDisplays; c++) {
+        // Prints the units of number
+        shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number%10] : dataArray[number%10]);  
+        
+        // Shifts right (in base 10)
+        number /= 10;
+        
+        // Note: first zero is printed
+        if (number == 0) {
+            for (byte k = c; k < numberOfDisplays; k++) {
+                shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xF : 0x0);  
+            }
+            
+            break;
+        }
+    }
+    digitalWrite(pinArray[1], HIGH);
 }
 
 // Deallocates the dynamic data
