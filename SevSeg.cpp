@@ -53,7 +53,7 @@ void SevSeg::number(byte num, bool zeros, byte base)
 			// Clear the unused digits or set to 0
 			if (num == 0) {
 				for (byte k = c; k < numberOfDisplays; k++) {
-					shiftOut(pinArray[2], pinArray[0], MSBFIRST, zeros ? dataArray[0] : (commonAnode ? 0xFF : 0x00) );  
+					shiftOut(pinArray[2], pinArray[0], MSBFIRST, zeros ? dataArray[0] : (commonAnode ? 0xFF : 0x00) );
 				}
 				break;
 			}
