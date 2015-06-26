@@ -59,12 +59,7 @@ public:
   
   ~SevSeg();
   
-  void number(byte number);
-  // pessimo overloading.....se l'utente finale usa sempre le int
-  // perchè non dovrebbe poter chiamare la prima number??
-  void number(int number, bool zeros = true);
-  // Io le accorperei così
-  // void number(byte num, byte base = 10);
+  void number(int number, const bool zeros = true, const base = 10);
   void numberHex(byte hexNum);
   void print(byte seq);			// Print a byte sequence
   void clear();				// Turn off all the displays

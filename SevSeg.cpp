@@ -55,7 +55,7 @@ void SevSeg::number(byte number) {
     }
 }
 
-void SevSeg::number(int number, bool zeros) {
+void SevSeg::number(int number, const bool zeros, const byte base) {
     // Only shift register is allowed
 	if (!shiftRegister) {
         return;
@@ -64,10 +64,10 @@ void SevSeg::number(int number, bool zeros) {
     digitalWrite(pinArray[1], LOW);
     for (byte c = 0; c < numberOfDisplays; c++) {
         // Prints the units of number
-        shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number%10] : dataArray[number%10]);  
+        shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number % base] : dataArray[number % base]);  
         
         // Shifts right (in base 10)
-        number /= 10;
+        number /= base;
         
         // Note: first zero is printed
         if (number == 0) {
