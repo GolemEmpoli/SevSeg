@@ -13,28 +13,40 @@
 #ifndef SevSeg_h
 #define SevSeg_h
 
-#define COMMON_CATHODE false
-#define COMMON_ANODE true
-
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #else
 #include "WProgram.h"
 #endif
 
+#define COMMON_CATHODE false
+#define COMMON_ANODE true
+
+#define clockPin 0
+#define latchPin 1
+#define dataPin 2
+
+
 // Array of bits corresponding to digits 0-9
 // from left to right => segment g to segment a
 const byte dataArray[] = {
-    0b00111111,
-    0b00000110,
-    0b01011011,
-    0b01001111,
-    0b01100110,
-    0b01101101,
-    0b01111101,
-    0b00000111,
-    0b01111111,
-    0b01101111
+    0b00111111,		// 0
+    0b00000110,		// 1
+    0b01011011,		// 2
+    0b01001111,		// 3
+    0b01100110,		// 4
+    0b01101101,		// 5
+    0b01111101,		// 6
+    0b00000111,		// 7
+    0b01111111,		// 8
+    0b01101111,		// 9
+    0b01110111,		// A
+    0b01111100,		// b
+    0b00111001,		// C
+    0b01011110,		// d
+    0b01111001, 	// E
+    0b01110001,		// F
+    0b
 };
 
 class SevSeg {
@@ -47,8 +59,14 @@ public:
   
   ~SevSeg();
   
-  void print(byte number);
-  void print(int number, bool zeros = true);
+  void number(byte number);
+  // pessimo overloading.....se l'utente finale usa sempre le int
+  // perchè non dovrebbe poter chiamare la prima number??
+  void number(int number, bool zeros = true);
+  // Io le accorperei così
+  // void number(byte num, byte base = 10);
+  void numberHex(byte hexNum);
+  void print(byte seq);			// Print a byte sequence
     
 private:
   
