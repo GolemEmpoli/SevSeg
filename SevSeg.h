@@ -58,12 +58,12 @@ public:
   SevSeg (byte data, byte latch, byte clock, boolean _commonAnode = false, byte _numberOfDisplays = 1);
   
   ~SevSeg();
-  
-  void number(int number, const bool zeros = true, const base = 10);
+  /*********** a che servono le const?? *************/
+  void number(int number, const bool zeros = true, const byte base = 10);
   void numberHex(byte hexNum);
   void print(byte seq);			// Print a byte sequence
-  void clear();				// Turn off all the displays
-    
+  void clear();					// Turn off all the displays
+
 private:
   
   // Pointer to the pins' array

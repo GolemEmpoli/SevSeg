@@ -32,61 +32,11 @@ SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode, byte _n
     for (byte set=0; set<3; set++) {
         pinMode(pinArray[set],OUTPUT);
     }
-
 }
 
-/*** GIULIO ***/
-// Prints a number on the display
-void SevSeg::number(byte number) {
-	if (!shiftRegister) {
-        for (byte c = 0, dataTmp = dataArray[number]; c < 7; c++, dataTmp = dataTmp >> 1) {
-            digitalWrite(pinArray[c], commonAnode ? !(dataTmp & 0x01) : dataTmp & 0x01);
-        }
-        
-    }
-    else {
-        if (numberOfDisplays == 1) {
-            digitalWrite(pinArray[1], LOW);
-            shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number] : dataArray[number]);  
-            digitalWrite(pinArray[1], HIGH);
-        }
-        else
-            this->number(number);
-    }
-}
-
-void SevSeg::number(int number, const bool zeros, const byte base) {
-    // Only shift register is allowed
-	if (!shiftRegister) {
-        return;
-    }
-            
-    digitalWrite(pinArray[1], LOW);
-    for (byte c = 0; c < numberOfDisplays; c++) {
-        // Prints the units of number
-        shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[number % base] : dataArray[number % base]);  
-        
-        // Shifts right (in base 10)
-        number /= base;
-        
-        // Note: first zero is printed
-        if (number == 0) {
-            for (byte k = c; k < numberOfDisplays; k++) {
-                shiftOut(pinArray[2], pinArray[0], MSBFIRST, zeros ? dataArray[0] : (commonAnode ? 0xFF : 0x00) );  
-            }
-            
-            break;
-        }
-    }
-    digitalWrite(pinArray[1], HIGH);
-}
-/*** FINE GIULIO ***/
-
-/* Proposta di accorpamento */
-void SevSeg::number(byte num, byte base)
+// Print a number
+void SevSeg::number(byte num, bool zeros, byte base)
 {
-	// Stampa pefforza 1 sola cifra.. si potrebbe mettere un controllo: pilotaggio diretto && display >1 incompatibile!!
-	// ..a meno di non avere un arduino mega ma a quel punto se la fanno loro la libreria....
 	if (!shiftRegister) {
         for (byte c = 0, dataTmp = dataArray[num]; c < 7; c++, dataTmp = dataTmp >> 1) {
             digitalWrite(pinArray[c], commonAnode ? !(dataTmp & 0x01) : dataTmp & 0x01);
@@ -100,11 +50,10 @@ void SevSeg::number(byte num, byte base)
 			shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? ~dataArray[num % base] : dataArray[ num % base]);
 			// Next digit
 			num /= base;
-			// Note: first zero is printed
-			// Clear the unused digits
+			// Clear the unused digits or set to 0
 			if (num == 0) {
 				for (byte k = c; k < numberOfDisplays; k++) {
-					shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xFF : 0x00);  
+					shiftOut(pinArray[2], pinArray[0], MSBFIRST, zeros ? dataArray[0] : (commonAnode ? 0xFF : 0x00) );  
 				}
 				break;
 			}
@@ -112,7 +61,6 @@ void SevSeg::number(byte num, byte base)
 		digitalWrite(pinArray[latchPin], HIGH);
 	}
 }
-/* Fine proposta di accorpamento */
 
 // Print a Hexadecimal number
 void SevSeg::numberHex(byte hexNum)
