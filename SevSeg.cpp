@@ -22,7 +22,7 @@ SevSeg::SevSeg( byte a, byte b, byte c, byte d, byte e, byte f, byte g, boolean 
 SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode, byte _numberOfDisplays) {
     commonAnode = _commonAnode;
     shiftRegister = true;
-    numberOfDisplays = _numberOfDisplays;
+    numberOfDisplays = _numberOfDisplays < 1 ? 1 : _numberOfDisplays;
     
     pinArray = new byte[3];
     pinArray[0] = clock;
@@ -35,6 +35,7 @@ SevSeg::SevSeg( byte clock, byte latch, byte data, boolean _commonAnode, byte _n
 
 }
 
+/*** GIULIO ***/
 // Prints a number on the display
 void SevSeg::number(byte number) {
 	if (!shiftRegister) {
@@ -71,7 +72,7 @@ void SevSeg::number(int number, bool zeros) {
         // Note: first zero is printed
         if (number == 0) {
             for (byte k = c; k < numberOfDisplays; k++) {
-                shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xF : 0x0);  
+                shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xFF : 0x00);  
             }
             
             break;
@@ -79,6 +80,7 @@ void SevSeg::number(int number, bool zeros) {
     }
     digitalWrite(pinArray[1], HIGH);
 }
+/*** FINE GIULIO ***/
 
 /* Proposta di accorpamento */
 void SevSeg::number(byte num, byte base)
@@ -102,7 +104,7 @@ void SevSeg::number(byte num, byte base)
 			// Clear the unused digits
 			if (num == 0) {
 				for (byte k = c; k < numberOfDisplays; k++) {
-					shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xF : 0x0);  
+					shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xFF : 0x00);  
 				}
 				break;
 			}
@@ -121,9 +123,32 @@ void SevSeg::numberHex(byte hexNum)
 // Print custom byte
 void SevSeg::print(byte seq)
 {
-	digitalWrite(pinArray[latchPin], LOW);
-	shiftOut(pinArray[dataPin], pinArray[clockPin], MSBFIRST, commonAnode ? ~seq : seq);
-	digitalWrite(latchPin, HIGH);
+	if (!shiftRegister)
+	{
+        for (byte c = 0; c < 7; c++, seq >>= 1)
+            digitalWrite(pinArray[c], commonAnode ? !(seq & 0x01) : seq & 0x01);
+    }
+    else
+    {
+		digitalWrite(pinArray[latchPin], LOW);
+		shiftOut(pinArray[dataPin], pinArray[clockPin], MSBFIRST, commonAnode ? ~seq : seq);
+		digitalWrite(latchPin, HIGH);
+	}
+}
+
+// Turn off the displays
+void SevSeg:clear()
+{
+	if (!shiftRegister)
+	{
+		for (byte c = 0; c < 7; c++)
+            digitalWrite(pinArray[c], commonAnode ? HIGH : LOW);
+	}
+	else
+	{
+		for (byte c = 0; c < numberOfDisplays; c++)
+			shiftOut(pinArray[dataPin], pinArray[clockPin], MSBFIRST, commonAnode ? 0xFF : 0x00);
+	}
 }
 
 // Deallocates the dynamic data

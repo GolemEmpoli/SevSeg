@@ -8,8 +8,8 @@ void setup(){
 
 void loop()
 {
-  for (byte i=0; i <= 9; i++){
-    display.print(i); // illumina le cifre da 0 a 9
+  for (byte i=0; i <= 9; i++) {
+    display.number(i); // illumina le cifre da 0 a 9
     delay(1000);
   }
 }

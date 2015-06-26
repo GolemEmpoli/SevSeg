@@ -12,7 +12,9 @@ SevSeg	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-print	KEYWORD2
+print       KEYWORD2
+number      KEYWORD2
+numberHex   KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

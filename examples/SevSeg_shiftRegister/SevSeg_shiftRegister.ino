@@ -20,21 +20,21 @@ void loop()
       if (punteggio < 9)
         punteggio++;
 
-      display.print(punteggio);
+      display.number(punteggio);
 
       break;
     case 1:  // Decrementa
       if (punteggio > 0)
         punteggio--;
         
-      display.print(punteggio);
+      display.number(punteggio);
 
       break;
 
     case 2:
             punteggio = 0;
         
-      display.print(punteggio);
+      display.number(punteggio);
     
       break;
   }

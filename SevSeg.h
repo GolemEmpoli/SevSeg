@@ -1,4 +1,4 @@
-/* Seven Segmen Driver Library v1.0
+/* Seven Segment Driver Library v1.0
  * 
  * Adapted by
  * Giulio Fieramosca
@@ -40,13 +40,13 @@ const byte dataArray[] = {
     0b00000111,		// 7
     0b01111111,		// 8
     0b01101111,		// 9
-    0b01110111,		// A
-    0b01111100,		// b
-    0b00111001,		// C
-    0b01011110,		// d
-    0b01111001, 	// E
-    0b01110001,		// F
-    0b
+    0b01110111,		// A (10)
+    0b01111100,		// b (11)
+    0b00111001,		// C (12)
+    0b01011110,		// d (13)
+    0b01111001, 	// E (14)
+    0b01110001,		// F (15)
+    0b10000000		// Dot Point (16)
 };
 
 class SevSeg {
@@ -67,6 +67,7 @@ public:
   // void number(byte num, byte base = 10);
   void numberHex(byte hexNum);
   void print(byte seq);			// Print a byte sequence
+  void clear();				// Turn off all the displays
     
 private:
   
