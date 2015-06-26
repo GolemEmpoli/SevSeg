@@ -72,7 +72,7 @@ void SevSeg::number(int number, bool zeros) {
         // Note: first zero is printed
         if (number == 0) {
             for (byte k = c; k < numberOfDisplays; k++) {
-                shiftOut(pinArray[2], pinArray[0], MSBFIRST, commonAnode ? 0xFF : 0x00);  
+                shiftOut(pinArray[2], pinArray[0], MSBFIRST, zeros ? dataArray[0] : (commonAnode ? 0xFF : 0x00) );  
             }
             
             break;
