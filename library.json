@@ -1,0 +1,15 @@
+{
+  "name": "SevSeg",
+  "keywords": "seven segment, shift register, display",
+  "description": "A library to drive a Seven Segment Display",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://giuliof@bitbucket.org/glgprograms/sevseg.git"
+  },
+  "frameworks": "arduino",
+  "platforms":
+  [
+    "atmelavr"
+  ]
+}
