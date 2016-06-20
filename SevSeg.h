@@ -2,7 +2,8 @@
  * 
  * Adapted by
  * Giulio Fieramosca
- *    http://www.glgprograms.tk
+ * Luca Mattii
+ *    http://www.glgprograms.it
  * 
  * Originally written by
  * Alexander Brevig
@@ -34,20 +35,27 @@ const byte dataArray[] = {
     0b01111101,
     0b00000111,
     0b01111111,
-    0b01101111
+    0b01101111,
+    0b01110111, // A (10)
+    0b01111100, // b (11)
+    0b01011000, // c (12)
+    0b01011110, // d (13)
+    0b01111011, // e (14)
+    0b01110001  // f (15)
 };
 
 class SevSeg {
 
 public:
   // Direct-wiring constructor
+  SevSeg (byte a, byte b, byte c, byte d, byte e, byte f, byte g, byte dp, boolean _commonAnode = false );
   SevSeg (byte a, byte b, byte c, byte d, byte e, byte f, byte g, boolean _commonAnode = false );
   // ShiftRegister-wiring constructor
-  SevSeg (byte data, byte latch, byte clock, boolean _commonAnode = false );
+  SevSeg (byte clock, byte latch, byte data, boolean _commonAnode = false );
   
   ~SevSeg();
   
-  void print(byte number);
+  void print(byte number, boolean dotpoint = false);
     
 private:
   
@@ -56,6 +64,7 @@ private:
   
   boolean shiftRegister;
   boolean commonAnode;
+  boolean dotpoint;
 };
 
 #endif
